@@ -1,18 +1,21 @@
+# documentation
+
 ## How to create docs for your model/api
 
 There are two ways to do so:
-- comment based description;
-- annotation based;
+
+* comment based description;
+* annotation based;
 
 ### Comment based
 
-In comment based way you should add comments above the property you want to add a description. Valid properties are: message, rpc, message and field.
-Comments are divided into two paragraphs: first paragraph will be a title, second one - summary. It is less verbose way, hence easier to read and understand.
-This one is preferred for dealing with plain cases to describe the properties in API.
+In comment based way you should add comments above the property you want to add a description. Valid properties are: message, rpc, message and field. Comments are divided into two paragraphs: first paragraph will be a title, second one - summary. It is less verbose way, hence easier to read and understand. This one is preferred for dealing with plain cases to describe the properties in API.
 
 #### An example:
+
 In `.proto` file:
-```
+
+```text
   ...
   //content
   //
@@ -22,7 +25,8 @@ In `.proto` file:
 ```
 
 Produces `JSON` for Swagger: :
-``` 
+
+```text
 ...       
 "content": {
    "$ref": "#/definitions/whisk.api.foodlist.v2.FoodItemContent",
@@ -34,83 +38,79 @@ Produces `JSON` for Swagger: :
 
 ### Annotation based
 
-In annotation based-way we deal with annotations for each type of property. It is more detailed way - you can describe almost everything. 
-But this one is more verbose so should be used in the certain cases where we need more details to be provided.
+In annotation based-way we deal with annotations for each type of property. It is more detailed way - you can describe almost everything. But this one is more verbose so should be used in the certain cases where we need more details to be provided.
 
 #### Message specs
 
-We are using grpc-annotations to let gen-swagger know how to deal with model in the Swagger Documentation. 
-You will start with `option (grpc.gateway.protoc_gen_swagger.options.openapiv2_schema) = {...}` annotation inside a `message` to describe it. 
-This annotation includes [fields](https://github.com/grpc-ecosystem/grpc-gateway/blob/master/protoc-gen-swagger/options/openapiv2.proto#L318-L338) to describe a `Scheme`:
-- json_schema
+We are using grpc-annotations to let gen-swagger know how to deal with model in the Swagger Documentation. You will start with `option (grpc.gateway.protoc_gen_swagger.options.openapiv2_schema) = {...}` annotation inside a `message` to describe it. This annotation includes [fields](https://github.com/grpc-ecosystem/grpc-gateway/blob/master/protoc-gen-swagger/options/openapiv2.proto#L318-L338) to describe a `Scheme`:
 
-    Defines the scheme of `endpoint` or `message`.
-     
-- descriminator
+* json\_schema
 
-    Adds support for polymorphism. The discriminator is the schema property name that is used to differentiate between other schema that inherit this schema
+  Defines the scheme of `endpoint` or `message`.
 
-- read_only
+* descriminator
 
-    Relevant only for Schema "properties" definitions. Declares the property as "read only". This means that it MAY be sent as part of a response but MUST NOT be sent as part of the request. Properties marked as readOnly being true SHOULD NOT be in the required list of the defined schema. Default value is false.
-    
-- external_docs
+  Adds support for polymorphism. The discriminator is the schema property name that is used to differentiate between other schema that inherit this schema
 
-    Additional external docs for this scheme.
-    
-- example
+* read\_only
 
-    JSON example of the scheme described
+  Relevant only for Schema "properties" definitions. Declares the property as "read only". This means that it MAY be sent as part of a response but MUST NOT be sent as part of the request. Properties marked as readOnly being true SHOULD NOT be in the required list of the defined schema. Default value is false.
+
+* external\_docs
+
+  Additional external docs for this scheme.
+
+* example
+
+  JSON example of the scheme described
 
 For more details look at [Official specs](https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md)
 
-###### <a name="schema"></a> JSON scheme
+**JSON scheme**
 
 Fields:
-- ref
-   
-   Ref is used to define an external reference to include in the message.
-   This could be a fully qualified proto message reference, and that type must be imported into the protofile. 
-   If no message is identified, the Ref will be used verbatim in the output. 
-   For example: `ref: ".google.protobuf.Timestamp"`
-   
-- title
-   
-   The tittle of the scheme. By default is fully-qualified name.
-   
-- description
-   
-   The description of the scheme.
-   
-- required 
-   
-   The list of required fields for scheme.
 
-For more details look at [Schema Object specs]([official docs](https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#schemaObject))
-   
-###### External docs
+* ref
+
+  Ref is used to define an external reference to include in the message. This could be a fully qualified proto message reference, and that type must be imported into the protofile. If no message is identified, the Ref will be used verbatim in the output. For example: `ref: ".google.protobuf.Timestamp"`
+
+* title
+
+  The tittle of the scheme. By default is fully-qualified name.
+
+* description
+
+  The description of the scheme.
+
+* required
+
+  The list of required fields for scheme.
+
+For more details look at \[Schema Object specs\]\([official docs](https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#schemaObject)\)
+
+**External docs**
 
 External docs represents just a link to an external documentation for that entity.
 
-- url 
+* url
 
-    The URL for the target documentation. Value MUST be in the format of a URL.
-   
-- description 
-    
-    A short description of the target documentation. GFM syntax can be used for rich text representation.
-    
+  The URL for the target documentation. Value MUST be in the format of a URL.
+
+* description
+
+  A short description of the target documentation. GFM syntax can be used for rich text representation.
+
 For more details look at [External Documentation Object specs](https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#external-documentation-object)
 
-##### Field description 
+**Field description**
 
-For a field description you will use the same JSON Scheme but with annotation `[(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {...}]`
-For more details you could check [this](https://github.com/grpc-ecosystem/grpc-gateway/blob/master/protoc-gen-swagger/options/openapiv2.proto#L127-L171):
+For a field description you will use the same JSON Scheme but with annotation `[(grpc.gateway.protoc_gen_swagger.options.openapiv2_field) = {...}]` For more details you could check [this](https://github.com/grpc-ecosystem/grpc-gateway/blob/master/protoc-gen-swagger/options/openapiv2.proto#L127-L171):
 
-##### Example of message scheme
+**Example of message scheme**
 
 In `.proto` file:
-```
+
+```text
 message FoodItem {
   option (grpc.gateway.protoc_gen_swagger.options.openapiv2_schema) = {
     json_schema: {
@@ -149,7 +149,8 @@ message FoodItem {
 ```
 
 Produces `JSON` for Swagger::
-```
+
+```text
 "whisk.api.foodlist.v2.FoodItem": {
       "type": "object",
       "example": {
@@ -185,58 +186,44 @@ Produces `JSON` for Swagger::
     },
 ```
 
-
 ### API specs
 
-API endpoint spec starts in service `rpc` method with annotation `option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {...}`.
-The scheme behind annotation is like [following](option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation))
+API endpoint spec starts in service `rpc` method with annotation `option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {...}`. The scheme behind annotation is like \[following\]\(option \(grpc.gateway.protoc\_gen\_swagger.options.openapiv2\_operation\)\)
 
-- tags
+* tags
 
-    A list of tags for API documentation control. Tags can be used for logical
-    grouping of operations by resources or any other qualified name. If you omit the field
-    the name of service will be Used.
+  A list of tags for API documentation control. Tags can be used for logical grouping of operations by resources or any other qualified name. If you omit the field the name of service will be Used.
 
-- summary
-     
-    A short summary of what the operation does. For maximum readability in the
-    swagger-ui, this field SHOULD be less than 120 characters.
+* summary
 
-- operation_id
+  A short summary of what the operation does. For maximum readability in the swagger-ui, this field SHOULD be less than 120 characters.
 
-    Unique string used to identify the operation. The id MUST be unique among
-    all operations described in the API. Tools and libraries MAY use the
-    operationId to uniquely identify an operation, therefore, it is recommended
-    to follow common programming naming conventions.
-    
-- responses ([Described below](#responses))
-    
-- deprecated
-    
-    Declares this operation to be deprecated. Usage of the declared operation
-    should be refrained. Default value is false.
-    
-- security ([Described below](#security_req))
-    
-    A declaration of which security schemes are applied for this operation. The
-    list of values describes alternative security schemes that can be used
-    (that is, there is a logical OR between the security requirements). This
-    definition overrides any declared top-level security. To remove a top-level
-    security declaration, an empty array can be used.
+* operation\_id
 
+  Unique string used to identify the operation. The id MUST be unique among all operations described in the API. Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is recommended to follow common programming naming conventions.
 
-#### <a name="responses"></a> Responses
+* responses \([Described below](documentation.md#responses)\)
+* deprecated
 
-Responses are represented by list of key value pairs `[key: "200", value: {} ]` 
+  Declares this operation to be deprecated. Usage of the declared operation should be refrained. Default value is false.
 
-- key 
-    
+* security \([Described below](documentation.md#security_req)\)
+
+  A declaration of which security schemes are applied for this operation. The list of values describes alternative security schemes that can be used \(that is, there is a logical OR between the security requirements\). This definition overrides any declared top-level security. To remove a top-level security declaration, an empty array can be used.
+
+#### Responses
+
+Responses are represented by list of key value pairs `[key: "200", value: {} ]`
+
+* key
+
   The key is the HTTP Status Code of response
-  
-- value
+
+* value
 
   Value is object that represents the response model which is referenced to `message`;
-  ```
+
+  ```text
     {
       description: "OK"
       schema: {
@@ -246,25 +233,24 @@ Responses are represented by list of key value pairs `[key: "200", value: {} ]`
       }
     }
   ```
-  Here should be the description of the response and it [schema](#schema) (we should use `ref` to link appropriate scheme)
-    
+
+  Here should be the description of the response and it [schema](documentation.md#schema) \(we should use `ref` to link appropriate scheme\)
+
 There could be a few values of responses like `[{key: "200", value: {...}}, {key: "400", value: {...}]`
 
-#### <a name="security_req"></a> Security requirements
+#### Security requirements
 
-- security_requirement
+* security\_requirement
 
-  Each name must correspond to a security scheme which is declared in
-  the Security Definitions. If the security scheme is of type "oauth2",
-  then the value is a list of scope names required for the execution.
-  For other security scheme types, the array MUST be empty.
+  Each name must correspond to a security scheme which is declared in the Security Definitions. If the security scheme is of type "oauth2", then the value is a list of scope names required for the execution. For other security scheme types, the array MUST be empty.
 
 For more details look at [Security requirements specs](https://github.com/OAI/OpenAPI-Specification/blob/3.0.0/versions/2.0.md#securityRequirementObject)
 
 #### Example of API docs
 
 In `.proto` file:
-```
+
+```text
 service FoodListAPI {
   rpc GetFoodList(GetFoodListRequest) returns (GetFoodListResponse) {
     option (google.api.http) = {
@@ -304,7 +290,8 @@ service FoodListAPI {
 ```
 
 Produces `JSON` for Swagger:
-```
+
+```text
  "/foodlist/v2": {
       "get": {
         "summary": "Get food list.",
@@ -343,18 +330,18 @@ Produces `JSON` for Swagger:
 
 ### Common spec for service
 
-To describe the information that should be provided across whole service we use `option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {...}`. 
-This is a file-based option which goes in the root of file and describes the common fields:
+To describe the information that should be provided across whole service we use `option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {...}`. This is a file-based option which goes in the root of file and describes the common fields:
 
-- responses (as it described in API spec)
-- securities (as it described in API spec)
+* responses \(as it described in API spec\)
+* securities \(as it described in API spec\)
 
 Those fields will be added to all endpoints of service, if there doesn't present one. In case there is already exists field with a key it won't be overwriten.
 
 #### An example
 
 In `.proto` file:
-```
+
+```text
   option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
     responses: [{
       key: "400"
@@ -380,10 +367,10 @@ In `.proto` file:
 
   ...
 
-  
+
   rpc GetFoodList(GetFoodListRequest) returns (GetFoodListResponse) {
     option (google.api.http) = {
-    
+
     ...   
 
     option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
@@ -400,7 +387,8 @@ In `.proto` file:
 ```
 
 Produces `JSON` for Swagger:
-```
+
+```text
 ...
   "400": {
     "description": "Not found",
@@ -415,8 +403,9 @@ Produces `JSON` for Swagger:
 
 ## Common example
 
-In `.proto` file: 
-```
+In `.proto` file:
+
+```text
   option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
     responses: {
       key: "403"
@@ -456,7 +445,7 @@ In `.proto` file:
 
 Produces `JSON` for Swagger:
 
-```
+```text
 ...
 "paths": {
     "/foodlist/v2": {
@@ -493,3 +482,4 @@ Produces `JSON` for Swagger:
     },
 ...
 ```
+
